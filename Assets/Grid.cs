@@ -36,10 +36,13 @@ public class Grid : MonoBehaviour
         //Assign the vertices in vertices array as mesh vertices
         mesh.vertices = vertices;
 
-        int[] triangle = new int[3];
+        int[] triangle = new int[6];
         triangle[0] = 0;
-        triangle[1] = 1;
-        triangle[2] = xSize+1; //first vertex in next row
+        triangle[1] = xSize + 1;//first vertex in next row
+        triangle[2] = 1;
+        triangle[3] = 1;
+        triangle[4] = xSize + 1;
+        triangle[5] = xSize + 2;
         mesh.triangles = triangle;
     }
 
