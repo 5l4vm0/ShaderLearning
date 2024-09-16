@@ -11,13 +11,19 @@ public class Grid : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(Generate());
+        Generate();
     }
 
-    IEnumerator Generate()
+    void Generate()
     {
         //Create a Vector3 array to store vertices
         vertices = new Vector3[(xSize + 1) * (ySize + 1)];
+
+        //Vector2 uv array
+        Vector2[] uv = new Vector2[vertices.Length];
+
+        //Vector4 tangent array
+        Vector4[] tangent = new Vector4[vertices.Length];
 
         //Get mesh filter component and give it a name
         mesh = GetComponent<MeshFilter>().mesh;
@@ -29,11 +35,15 @@ public class Grid : MonoBehaviour
             for(int x =0; x <= xSize; x++, i++)
             {
                 vertices[i] = new Vector3(x,y);
+                uv[i] = new Vector2((float)x / xSize,(float) y / ySize);
+                tangent[i] = new Vector4(1, 0, 0, -1);
             }
         }
 
         //Assign the vertices in vertices array as mesh vertices
         mesh.vertices = vertices;
+        mesh.uv = uv;
+        mesh.tangents = tangent;
 
         int[] triangle = new int[xSize * 6 * ySize]; //xsize *6 cause there are xsize*6 vertices for 1 square
         
@@ -45,19 +55,16 @@ public class Grid : MonoBehaviour
                 triangle[t + 1] = triangle[t + 4] = v + xSize + 1;//first vertex in next row
                 triangle[t + 2] = triangle[t + 3] = v + 1;
                 triangle[t + 5] = v + xSize + 2;
-                yield return new WaitForSecondsRealtime(0.1f);
-                mesh.triangles = triangle; //The mesh.triangles array is a list of triangles that contains indices into the vertex array.
-
             }
         }
-
 
         //2 triangles
         //triangle[0] = 0;
         //triangle[1] = triangle[4] = xSize + 1;//first vertex in next row
         //triangle[2] = triangle[3] = 1;
         //triangle[5] = xSize + 2;
-        
+        mesh.triangles = triangle; //The mesh.triangles array is a list of triangles that contains indices into the vertex array.
+        mesh.RecalculateNormals();
     }
 
     private void OnDrawGizmos()
