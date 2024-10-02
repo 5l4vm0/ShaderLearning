@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class TransformationGrid : MonoBehaviour
     public int gridResolution = 10;
     Transform[] grid;
     List<Transformation> transformations;
+    Matrix4x4 transformation;
 
     void Awake()
     {
@@ -32,12 +34,12 @@ public class TransformationGrid : MonoBehaviour
 
     private void Update()
     {
-        GetComponents<Transformation>(transformations); //This will fill this transfomation list with all components of type Transformation found 
-        for (int i = 0, x = 0; x < gridResolution; x++)
+        UpdateTransformation();
+        for (int i = 0, z = 0; z < gridResolution; z++)
         {
             for (int y = 0; y < gridResolution; y++)
             {
-                for (int z = 0; z < gridResolution; z++, i++)
+                for (int x = 0; x < gridResolution; x++, i++)
                 {
                     grid[i].localPosition = TransformPoint(x, y, z);
                 }
@@ -60,11 +62,29 @@ public class TransformationGrid : MonoBehaviour
 
     private Vector3 TransformPoint(int x, int y, int z)
     {
+        //Vector3 coordinates = GetCoordinates(x, y, z);
+        //for(int i =0; i < transformations.Count; i++)
+        //{
+        //    coordinates = transformations[i].Apply(coordinates);
+        //}
+        //return coordinates;
+
         Vector3 coordinates = GetCoordinates(x, y, z);
-        for(int i =0; i < transformations.Count; i++)
-        {
-            coordinates = transformations[i].Apply(coordinates);
-        }
-        return coordinates;
+        return transformation.MultiplyPoint(coordinates);
     }
+
+    private void UpdateTransformation()
+    {
+        GetComponents<Transformation>(transformations); //This will fill this transfomation list with all components of type Transformation found 
+
+        if (transformations.Count > 0)
+        {
+            transformation = transformations[0].Matrix;
+            for (int i =1; i< transformations.Count; i++)
+            {
+                transformation = transformations[i].Matrix * transformation;
+            }
+        }
+    }
+
 }
