@@ -16,20 +16,21 @@ public class TransformationGrid : MonoBehaviour
 
     void Awake()
     {
-        transformations = new List<Transformation>();
+        
 
         grid = new Transform[gridResolution * gridResolution * gridResolution];
         
-        for(int i=0, x =0; x < gridResolution; x++)
+        for(int i=0, z =0; z < gridResolution; z++)
         {
             for(int y = 0; y < gridResolution; y++)
             {
-                for(int z =0; z< gridResolution; z++, i++)
+                for(int x =0; x< gridResolution; x++, i++)
                 {
                     grid[i] = CreateGridPoint(x, y, z);
                 }
             }
         }
+        transformations = new List<Transformation>();
     }
 
     private void Update()
@@ -57,7 +58,7 @@ public class TransformationGrid : MonoBehaviour
     
     Vector3 GetCoordinates(int x, int y, int z) // Make the centre of the grid to 0,0,0
     {
-        return new Vector3(x - (gridResolution - 1) / 2, y - (gridResolution - 1) / 2,z - (gridResolution - 1) / 2);
+        return new Vector3(x - (gridResolution - 1) /2f, y - (gridResolution - 1) /2f,z - (gridResolution - 1) /2f);
     }
 
     private Vector3 TransformPoint(int x, int y, int z)
