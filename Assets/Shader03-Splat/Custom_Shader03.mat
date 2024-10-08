@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Custom_Shader01
-  m_Shader: {fileID: 4800000, guid: 2778b067be3aea34f98532ad439e85a7, type: 3}
+  m_Name: Custom_Shader03
+  m_Shader: {fileID: 4800000, guid: 61fce8737961fee419eddac42a570eb6, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -24,11 +24,26 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 17a1cf265e25f2645903fac7f8c74586, type: 3}
+        m_Scale: {x: 4, y: 4}
+        m_Offset: {x: 0, y: 0}
+    - _Texture1:
+        m_Texture: {fileID: 2800000, guid: 3083d69958097d1419a7b90f7bfeff6d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2:
+        m_Texture: {fileID: 2800000, guid: 017f498396493424d9b4d60fcc81ef54, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture3:
+        m_Texture: {fileID: 2800000, guid: f991e4ecd62e74fb0bc83cdbbb427c8c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture4:
         m_Texture: {fileID: 2800000, guid: 5aa05ee4ef74f9243a141a137d491398, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats: []
-    m_Colors:
-    - _Tint: {r: 1, g: 1, b: 1, a: 1}
+    m_Colors: []
   m_BuildTextureStacks: []
