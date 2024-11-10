@@ -1,4 +1,4 @@
-Shader "Custom/RustShader"
+Shader "Custom/RustShaderPBR"
 {
   Properties{
     _PatternTexture ("Pattern Texture", 2D) = "white"{}
@@ -15,7 +15,7 @@ Shader "Custom/RustShader"
       Tags{"LightMode" = "ForwardBase"}
       
         CGPROGRAM
-        
+        #pragma target 3.0
         #pragma vertex Vert
         #pragma fragment Frag
         #include "UnityCG.cginc"

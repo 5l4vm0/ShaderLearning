@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Custom_RustShaderPBR
-  m_Shader: {fileID: 4800000, guid: 34b7490c94fb74d43a997f704645b34c, type: 3}
+  m_Shader: {fileID: 4800000, guid: 197dc877c70a48b4c8ec291800a4aba4, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -43,7 +43,7 @@ Material:
     m_Floats:
     - _Metallic: 0
     - _Smoothiness: 0.74
-    - _Smoothness: 0.065
-    - _Value: 0.914
+    - _Smoothness: 0.444
+    - _Value: 0
     m_Colors: []
   m_BuildTextureStacks: []
