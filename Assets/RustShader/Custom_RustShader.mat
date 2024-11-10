@@ -43,7 +43,7 @@ Material:
     m_Floats:
     - _Metallic: 0
     - _Smoothiness: 0.74
-    - _Smoothness: 0.07
+    - _Smoothness: 0.033
     - _Value: 0
     m_Colors: []
   m_BuildTextureStacks: []
