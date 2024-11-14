@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Custom_Gradient
-  m_Shader: {fileID: 4800000, guid: 8414849e2ba92c0428ff5b4e38410007, type: 3}
+  m_Name: Custom_VertexShader
+  m_Shader: {fileID: 4800000, guid: f39d43f6d005f284a80a08325f7e1a81, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -22,13 +22,12 @@ Material:
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs: []
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 24dd1a70ad39093499279f469e659726, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
-    m_Floats:
-    - _BlendEnd: 0.767
-    - _BlendStart: 0.091
-    - _Value: 1
-    m_Colors:
-    - _Color1: {r: 0, g: 0.7603097, b: 1, a: 1}
-    - _Color2: {r: 0.9433962, g: 0, b: 0.87105685, a: 1}
+    m_Floats: []
+    m_Colors: []
   m_BuildTextureStacks: []

@@ -1,4 +1,4 @@
-Shader "Custom/Gradient"
+ Shader "Custom/Gradient"
 {
     Properties
     {
@@ -19,8 +19,8 @@ Shader "Custom/Gradient"
         pass
         {
             Cull Off
-            ZWrite Off // whether to write to depth buffer (Whether it can block other objects)
-            ZTest Always//Whether it can be blocked
+            ZWrite off // whether to write to depth buffer (Whether it can block other objects)
+            ZTest LEqual//Whether it can be blocked
             Blend One One // Additive
 
             CGPROGRAM
