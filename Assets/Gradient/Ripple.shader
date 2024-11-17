@@ -4,7 +4,9 @@ Shader "Custom/Ripple"
     {
         _Color("Color", Color) = (1,1,1,1)
         _Texture("Texture", 2D) = "white"
-        _InputCentre("Input Centre", Vector) = (0.5,0.5,0,0)
+        _Decay("Decay", float) = 5
+        //_InputCentre("Input Centre", Vector) = (0.5,0.5,0,0)
+        //_InputCentre2 ("Input Centre", Vector) =(0,0,0,0)
     }
 
     SubShader
@@ -20,7 +22,9 @@ Shader "Custom/Ripple"
 
             float4 _Color;
             sampler2D _Texture;
-            float4 _InputCentre;
+            float _Decay;
+            float4 _InputCentre[5];
+            //float4 _InputCentre2;
             
             struct VertexInput
             {
@@ -40,13 +44,20 @@ Shader "Custom/Ripple"
                 float distanceFromCentre = length(offset);
                 float wave = cos(distanceFromCentre *25 - _Time.y*3)*0.5+0.5;
                 float rim = 1-distanceFromCentre*0.8;
-                return wave*rim;
+                
+                return saturate(wave)*0.5*rim;
             }
 
             VertexOutput vert(VertexInput i)
             {
                 VertexOutput o;
-                i.pos.y = Wave(i.uv, _InputCentre.xy)*0.5;
+                float combinedWave;
+                for(int n =0; n<5; n++)
+                {
+                    combinedWave += Wave(i.uv, _InputCentre[n].xy);
+                }
+
+                i.pos.y = combinedWave*0.5;
                 o.pos = UnityObjectToClipPos(i.pos);
                 o.uv = i.uv;
                 return o;
@@ -55,7 +66,13 @@ Shader "Custom/Ripple"
             float4 frag(VertexOutput o):SV_TARGET
             {
                 float4 tex = tex2D(_Texture, o.uv);
-                return max(0.0, Wave(o.uv,_InputCentre.xy)*_Color+tex);
+                float combinedWave;
+                for(int n =0; n<5; n++)
+                {
+                    combinedWave += Wave(o.uv, _InputCentre[n].xy);
+                }
+                
+                return max(0.0, saturate(combinedWave*_Color)+tex);
             }
 
             ENDCG
