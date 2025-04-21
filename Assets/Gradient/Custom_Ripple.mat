@@ -29,12 +29,16 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Decay: 2
     - _RippleDecay: 2
     - _RippleFrequency: 40.01
     - _RippleSpeed: 1
     - _WaveAmplitude: 0.5
     - _WaveFrequency: 25
+    - _WaveLiftTime: 5
     - _WaveSpeed: 3
+    - _WaveStrength: 0.3
+    - _maxRipple: 30
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _InputCentre: {r: 0.5, g: 0.5, b: 0, a: 0}
