@@ -44,13 +44,15 @@ Shader "Custom/Ripple"
             //wave calculation
             float Wave(float2 uv, float2 centre, float startTime)
             {
-                float2 offset = uv-centre;
-                float distanceFromCentre = length(offset);
+                if(startTime <=0) return 0;
                 
                 //discard old wave
                 float age = _Time.y - startTime;
                 if(age>_WaveLiftTime) return 0;
 
+                float2 offset = uv-centre;
+                float distanceFromCentre = length(offset);
+                
                 // Base cosine wave calculation
                 float wave = cos(distanceFromCentre *_WaveFrequency - _Time.y*_WaveSpeed)*0.5+0.5;
 
@@ -60,8 +62,9 @@ Shader "Custom/Ripple"
                 //applied time to decay
                 float decay = spatialDecay * (1-age/_WaveLiftTime);
                 
-                return saturate(wave) * _WaveStrength * decay;
+                return wave * _WaveStrength * decay;
             }
+            
 
             VertexOutput vert(VertexInput i)
             {
@@ -69,6 +72,7 @@ Shader "Custom/Ripple"
                 float combinedWave=0;
 
                 // Accumulate up to 10 waves
+                UNITY_LOOP
                 for(int n =0; n<10; n++)
                 {
                     combinedWave += Wave(i.uv, _InputCentre[n].xy,_InputCentre[n].z);
@@ -87,6 +91,7 @@ Shader "Custom/Ripple"
                 float combinedWave=0;
 
                 // Accumulate wave intensity again for visual effect
+                UNITY_LOOP
                 for(int n =0; n<10; n++)
                 {
                     if(combinedWave > 1.0) continue;
