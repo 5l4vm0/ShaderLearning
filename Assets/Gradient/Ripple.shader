@@ -3,10 +3,12 @@ Shader "Custom/Ripple"
     Properties
     {
         _Color("Color", Color) = (1,1,1,1)
-        _Texture("Texture", 2D) = "white"
+        _Texture("Texture", 2D) = "white"{}
         _Decay("Decay", float) = 5
-        //_InputCentre("Input Centre", Vector) = (0.5,0.5,0,0)
-        //_InputCentre2 ("Input Centre", Vector) =(0,0,0,0)
+        _WaveLiftTime("Wave Life Time", Range(1,10)) = 2
+        _WaveFrequency("Wave Frequency", float) = 25
+        _WaveSpeed("Wave Speed", float) = 3
+        _WaveStrength("Wave Strength", float) = 0.3
     }
 
     SubShader
@@ -22,7 +24,9 @@ Shader "Custom/Ripple"
 
             float4 _Color;
             sampler2D _Texture;
-            float _Decay;
+            float _Decay, _WaveLiftTime, _WaveFrequency, _WaveSpeed, _WaveStrength;
+
+            //InputCentre array : xy = input centre, z = start time
             float4 _InputCentre[10];
             
             struct VertexInput
@@ -33,34 +37,44 @@ Shader "Custom/Ripple"
             
             struct VertexOutput
             {
-                float4 pos: SV:POSITION;
+                float4 pos: SV_POSITION;
                 float2 uv:TEXCOORD;
             };
-
+            
+            //wave calculation
             float Wave(float2 uv, float2 centre, float startTime)
             {
                 float2 offset = uv-centre;
                 float distanceFromCentre = length(offset);
-
-                float age = _Time.y - startTime;
-                if(age>2) return 0;
-
-                float wave = cos(distanceFromCentre *25 - _Time.y*3)*0.5+0.5;
-                float rim = 1-distanceFromCentre*0.8;
-                float spatialDecay = 1.0 - saturate(distanceFromCentre * _Decay);
                 
-                return saturate(wave)*0.5*rim*spatialDecay*(1-age/2.0);
+                //discard old wave
+                float age = _Time.y - startTime;
+                if(age>_WaveLiftTime) return 0;
+
+                // Base cosine wave calculation
+                float wave = cos(distanceFromCentre *_WaveFrequency - _Time.y*_WaveSpeed)*0.5+0.5;
+
+                //distance-based decay
+                float spatialDecay = 1.0 - saturate(distanceFromCentre * _Decay);
+
+                //applied time to decay
+                float decay = spatialDecay * (1-age/_WaveLiftTime);
+                
+                return saturate(wave) * _WaveStrength * decay;
             }
 
             VertexOutput vert(VertexInput i)
             {
                 VertexOutput o;
-                float combinedWave;
+                float combinedWave=0;
+
+                // Accumulate up to 10 waves
                 for(int n =0; n<10; n++)
                 {
                     combinedWave += Wave(i.uv, _InputCentre[n].xy,_InputCentre[n].z);
                 }
 
+                // Offset vertex height by combined wave
                 i.pos.y = combinedWave*0.5;
                 o.pos = UnityObjectToClipPos(i.pos);
                 o.uv = i.uv;
@@ -70,9 +84,12 @@ Shader "Custom/Ripple"
             float4 frag(VertexOutput o):SV_TARGET
             {
                 float4 tex = tex2D(_Texture, o.uv);
-                float combinedWave;
+                float combinedWave=0;
+
+                // Accumulate wave intensity again for visual effect
                 for(int n =0; n<10; n++)
                 {
+                    if(combinedWave > 1.0) continue;
                     combinedWave += Wave(o.uv, _InputCentre[n].xy,_InputCentre[n].z);
                 }
                 
