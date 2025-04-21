@@ -23,8 +23,7 @@ Shader "Custom/Ripple"
             float4 _Color;
             sampler2D _Texture;
             float _Decay;
-            float4 _InputCentre[5];
-            //float4 _InputCentre2;
+            float4 _InputCentre[10];
             
             struct VertexInput
             {
@@ -38,23 +37,28 @@ Shader "Custom/Ripple"
                 float2 uv:TEXCOORD;
             };
 
-            float Wave(float2 uv, float2 centre)
+            float Wave(float2 uv, float2 centre, float startTime)
             {
                 float2 offset = uv-centre;
                 float distanceFromCentre = length(offset);
+
+                float age = _Time.y - startTime;
+                if(age>2) return 0;
+
                 float wave = cos(distanceFromCentre *25 - _Time.y*3)*0.5+0.5;
                 float rim = 1-distanceFromCentre*0.8;
+                float spatialDecay = 1.0 - saturate(distanceFromCentre * _Decay);
                 
-                return saturate(wave)*0.5*rim;
+                return saturate(wave)*0.5*rim*spatialDecay*(1-age/2.0);
             }
 
             VertexOutput vert(VertexInput i)
             {
                 VertexOutput o;
                 float combinedWave;
-                for(int n =0; n<5; n++)
+                for(int n =0; n<10; n++)
                 {
-                    combinedWave += Wave(i.uv, _InputCentre[n].xy);
+                    combinedWave += Wave(i.uv, _InputCentre[n].xy,_InputCentre[n].z);
                 }
 
                 i.pos.y = combinedWave*0.5;
@@ -67,9 +71,9 @@ Shader "Custom/Ripple"
             {
                 float4 tex = tex2D(_Texture, o.uv);
                 float combinedWave;
-                for(int n =0; n<5; n++)
+                for(int n =0; n<10; n++)
                 {
-                    combinedWave += Wave(o.uv, _InputCentre[n].xy);
+                    combinedWave += Wave(o.uv, _InputCentre[n].xy,_InputCentre[n].z);
                 }
                 
                 return max(0.0, saturate(combinedWave*_Color)+tex);
